@@ -153,12 +153,14 @@ public class mainFrame extends JFrame{
     }
 
     private void saveContacts(){
-        //((ContactImplement) contactManager).saveContactsToCSV();
+        ((ContactImplement) contactManager).saveContactsToCSV();
+
 
     }
 
     private void loadContacts(){
-       // ((ContactImplement) contactManager).loadContactCSV();
+        ((ContactImplement) contactManager).loadContactCSV();
         displayAllContacts();
+
     }
 }

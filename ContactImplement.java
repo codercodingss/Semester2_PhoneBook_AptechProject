@@ -12,40 +12,41 @@ public class ContactImplement implements Contact{
     private static final String CSV = "contacts.csv"; 
     public ContactImplement(){
         this.contacts = new HashMap<>(); 
+        loadContactCSV();
     }
 
-    private void saveContactsToCSV(){
-        try(BufferedWriter writer = new BufferedWriter(new FileWriter("/src/directory/contacts.csv"))){
-            for(ContactDetails contact : contacts.values()){
-                writer.write(String.format("%s, %s, %s, %s\n", 
-                   contact.getFirstName(), 
-                   contact.getLastName(), 
-                   contact.getPhoneNo(), 
-                   contact.getAddress(),
-                   contact.getCity()
+    private void saveContactsToCSV() {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(CSV_FILE_PATH))) {
+            for (ContactDetails contact : contacts.values()) {
+                writer.write(String.format("%s, %s, %s, %s, %s\n",
+                        contact.getFirstName(),
+                        contact.getLastName(),
+                        contact.getPhoneNo(),
+                        contact.getAddress(),
+                        contact.getCity()
                 ));
             }
-            System.out.println("Contact saved");
-        } catch(IOException e){
+            System.out.println("Contacts saved to CSV file");
+        } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
-    private void loadContactCSV(){
-        try(BufferedReader reader = new BufferedReader(new FileReader("/src/directory/contacts.csv"))){
-            String line; 
-            while((line = reader.readLine()) != null){
-                String[] parts = line.split(","); 
-                if(parts.length == 4){
-                    addContact(parts[0], parts[1], parts[2], parts[3], parts[4]);
+    private void loadContactCSV() {
+        try (BufferedReader reader = new BufferedReader(new FileReader(CSV_FILE_PATH))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",");
+                if (parts.length == 5) {
+                    addContact(parts[0].trim(), parts[1].trim(), parts[2].trim(), parts[3].trim(), parts[4].trim());
                 }
             }
-            System.out.println("contacts loaded from CSV file"); 
-        }catch(IOException e){
+            System.out.println("Contacts loaded from CSV file");
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
+}
 
     @Override
     public void addContact(String firstName, String lastName, String phone, String address, String city){
