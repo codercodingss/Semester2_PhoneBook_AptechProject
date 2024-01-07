@@ -1,4 +1,3 @@
-
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
@@ -8,7 +7,7 @@ import java.io.*;
 public class ContactImplement implements Contact {
 
     private final Map<String, ContactDetails> contacts;
-    private static final String CSV_FILE_PATH = "contacts.csv";
+    private static final String CSV_FILE_PATH = "contacts.txt";
 
     public ContactImplement() {
         this.contacts = new HashMap<>();
@@ -48,11 +47,25 @@ public class ContactImplement implements Contact {
 
     @Override
     public void addContact(String firstName, String lastName, String phone, String address, String city) {
-        String key = generateKey(firstName, lastName);
-        contacts.put(key, new ContactDetails(firstName, lastName, phone, address, city));
+        if (isPhoneUnique(phone)) {
+            String key = generateKey(firstName, lastName);
+            contacts.put(key, new ContactDetails(firstName, lastName, phone, address, city));
 
-        System.out.println("Contact added" + firstName + " " + lastName);
-        saveContactsToCSV();
+            System.out.println("Contact added: " + firstName + " " + lastName);
+            saveContactsToCSV();
+        } else {
+            System.out.println("Phone number already exists. Cannot add contact.");
+        }
+    }
+
+    private boolean isPhoneUnique(String phone) {
+        for (ContactDetails contact : contacts.values()) {
+            if (contact.getPhoneNo().equals(phone)) {
+                return false;
+            }
+        }
+        return true;
+
     }
 
     @Override
@@ -173,11 +186,11 @@ public class ContactImplement implements Contact {
     public List<String> searchContacts(String searchTerm) {
         List<String> result = new ArrayList<>();
         for (ContactDetails contact : contacts.values()) {
-            if (contact.getFirstName().toLowerCase().contains(searchTerm.toLowerCase())
-                    || contact.getLastName().toLowerCase().contains(searchTerm.toLowerCase())
+            if (contact.getFirstName().toLowerCase().contains(searchTerm)
+                    || contact.getLastName().toLowerCase().contains(searchTerm)
                     || contact.getPhoneNo().contains(searchTerm)
-                    || contact.getAddress().toLowerCase().contains(searchTerm.toLowerCase())
-                    || contact.getCity().toLowerCase().contains(searchTerm.toLowerCase())) {
+                    || contact.getAddress().toLowerCase().contains(searchTerm)
+                    || contact.getCity().toLowerCase().contains(searchTerm)) {
                 result.add(contact.toString());
             }
         }
